@@ -12,6 +12,7 @@ repository = "https://github.com/code-sam/cairn-knowledge-graph"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+stacked_linear_algebra_graph = {version = "0.3"}
 graphblas_sparse_linear_algebra = {version = "0.8"}
 hashbrown = {version = "0.11", features = ["rayon"]}
 once_cell = {version = "1.8"}
