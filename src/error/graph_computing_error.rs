@@ -10,6 +10,7 @@ use super::user_error::{UserError, UserErrorType};
 use graphblas_sparse_linear_algebra::error::{
     SparseLinearAlgebraError, SparseLinearAlgebraErrorType,
 };
+use stacked_linear_algebra_graph::graphblas_sparse_linear_algebra;
 
 #[derive(Debug)]
 pub enum GraphComputingError {

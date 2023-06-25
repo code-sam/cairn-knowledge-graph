@@ -1,6 +1,6 @@
 [package]
 name = "cairn-knowledge-graph"
-version = "0.4.2"
+version = "0.5.0"
 authors = ["code_sam <mail@samdekker.nl>"]
 description = "An embedded and in-memory knowledge graph for static specification analysis."
 edition = "2021"
@@ -13,16 +13,9 @@ repository = "https://github.com/code-sam/cairn-knowledge-graph"
 
 [dependencies]
 stacked_linear_algebra_graph = {version = "0.3"}
-graphblas_sparse_linear_algebra = {version = "0.8"}
-hashbrown = {version = "0.11", features = ["rayon"]}
-once_cell = {version = "1.8"}
-rayon = {version = "1.5"}
 
 [dev-dependencies]
 criterion = "0.3"
-rand = "0.8"
-rustc-hash = {version = "1.1"}
-nohash-hasher = "0.2"
 
 [[bench]]
 # name = "experiments"
