@@ -27,7 +27,7 @@ Applications can include the cairn_knowledge_graph crate as a dependency. Buildi
 
 ## Minimum example
 ```rust
-// use cairn_knowledge_graph::error::GraphComputingError;
+// use cairn_knowledge_graph::error::LinearAlgebraGraphComputingError;
 // use cairn_knowledge_graph::graph::edge::DirectedEdgeDefinedByKeys;
 // use cairn_knowledge_graph::graph::graph::Graph;
 // use cairn_knowledge_graph::graph::vertex::{Vertex, VertexValue};

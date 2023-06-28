@@ -5,7 +5,13 @@ use std::fmt;
 use graphblas_sparse_linear_algebra::error::{
     SparseLinearAlgebraError, SparseLinearAlgebraErrorType,
 };
-use stacked_linear_algebra_graph::graphblas_sparse_linear_algebra;
+use stacked_linear_algebra_graph::{
+    error::{
+        GraphComputingError as LinearAlgebraGraphComputingError,
+        GraphComputingErrorType as LinearAlgebraGraphComputingErrorType,
+    },
+    graphblas_sparse_linear_algebra,
+};
 
 #[derive(Debug)]
 pub struct OtherError {
@@ -18,6 +24,7 @@ pub struct OtherError {
 pub enum OtherErrorSource {
     Display(std::fmt::Error),
     SparseLinearAlgebra(SparseLinearAlgebraError),
+    LinearAlgebraGraphComputing(LinearAlgebraGraphComputingError),
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -25,6 +32,7 @@ pub enum OtherErrorType {
     Display,
     Other,
     SparseLinearAlgebra(SparseLinearAlgebraErrorType),
+    LinearAlgebraGraphComputing(LinearAlgebraGraphComputingErrorType),
 }
 
 impl OtherError {
@@ -54,6 +62,7 @@ impl error::Error for OtherError {
             Some(ref error) => match error {
                 OtherErrorSource::Display(error) => Some(error),
                 OtherErrorSource::SparseLinearAlgebra(error) => Some(error),
+                OtherErrorSource::LinearAlgebraGraphComputing(error) => Some(error),
             },
             None => None,
         }
@@ -91,6 +100,16 @@ impl From<SparseLinearAlgebraError> for OtherError {
             error_type: OtherErrorType::SparseLinearAlgebra(error.error_type()),
             explanation: String::new(),
             source: Some(OtherErrorSource::SparseLinearAlgebra(error)),
+        }
+    }
+}
+
+impl From<LinearAlgebraGraphComputingError> for OtherError {
+    fn from(error: LinearAlgebraGraphComputingError) -> Self {
+        Self {
+            error_type: OtherErrorType::LinearAlgebraGraphComputing(error.error_type()),
+            explanation: String::new(),
+            source: Some(OtherErrorSource::LinearAlgebraGraphComputing(error)),
         }
     }
 }

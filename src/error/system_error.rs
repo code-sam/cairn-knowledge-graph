@@ -5,7 +5,13 @@ use std::fmt;
 use graphblas_sparse_linear_algebra::error::{
     SparseLinearAlgebraError, SparseLinearAlgebraErrorType,
 };
-use stacked_linear_algebra_graph::graphblas_sparse_linear_algebra;
+use stacked_linear_algebra_graph::{
+    error::{
+        GraphComputingError as LinearAlgebraGraphComputingError,
+        GraphComputingErrorType as LinearAlgebraGraphComputingErrorType,
+    },
+    graphblas_sparse_linear_algebra,
+};
 
 #[derive(Debug)]
 pub struct SystemError {
@@ -17,12 +23,14 @@ pub struct SystemError {
 #[derive(Debug)]
 pub enum SystemErrorSource {
     SparseLinearAlgebra(SparseLinearAlgebraError),
+    LinearAlgebraGraphComputing(LinearAlgebraGraphComputingError),
     PoisonedData,
 }
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum SystemErrorType {
     SparseLinearAlgebra(SparseLinearAlgebraErrorType),
+    LinearAlgebraGraphComputing(LinearAlgebraGraphComputingErrorType),
     CreateGraphBlasErrorOnSuccessValue,
     KeyNotFound,
     UnsupportedGraphBlasErrorValue,
@@ -60,6 +68,7 @@ impl error::Error for SystemError {
             Some(ref error) => match error {
                 SystemErrorSource::SparseLinearAlgebra(error) => Some(error),
                 SystemErrorSource::PoisonedData => None,
+                SystemErrorSource::LinearAlgebraGraphComputing(error) => Some(error),
             },
             None => None,
         }
@@ -86,6 +95,16 @@ impl From<SparseLinearAlgebraError> for SystemError {
             error_type: SystemErrorType::SparseLinearAlgebra(error.error_type()),
             explanation: String::new(),
             source: Some(SystemErrorSource::SparseLinearAlgebra(error)),
+        }
+    }
+}
+
+impl From<LinearAlgebraGraphComputingError> for SystemError {
+    fn from(error: LinearAlgebraGraphComputingError) -> Self {
+        Self {
+            error_type: SystemErrorType::LinearAlgebraGraphComputing(error.error_type()),
+            explanation: String::new(),
+            source: Some(SystemErrorSource::LinearAlgebraGraphComputing(error)),
         }
     }
 }

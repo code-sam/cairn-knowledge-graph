@@ -5,7 +5,13 @@ use std::fmt;
 use graphblas_sparse_linear_algebra::error::{
     SparseLinearAlgebraError, SparseLinearAlgebraErrorType,
 };
-use stacked_linear_algebra_graph::graphblas_sparse_linear_algebra;
+use stacked_linear_algebra_graph::{
+    error::{
+        GraphComputingError as LinearAlgebraGraphComputingError,
+        GraphComputingErrorType as LinearAlgebraGraphComputingErrorType,
+    },
+    graphblas_sparse_linear_algebra,
+};
 
 #[derive(Debug)]
 pub struct LogicError {
@@ -17,11 +23,13 @@ pub struct LogicError {
 #[derive(Debug)]
 pub enum LogicErrorSource {
     SparseLinearAlgebra(SparseLinearAlgebraError),
+    LinearAlgebraGraphComputing(LinearAlgebraGraphComputingError),
 }
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum LogicErrorType {
     SparseLinearAlgebra(SparseLinearAlgebraErrorType),
+    LinearAlgebraGraphComputingError(LinearAlgebraGraphComputingErrorType),
     DimensionMismatch,
     EdgeTypeAlreadyExists,
     EdgeTypeMustExist,
@@ -56,6 +64,7 @@ impl error::Error for LogicError {
         match self.source {
             Some(ref error) => match error {
                 LogicErrorSource::SparseLinearAlgebra(error) => Some(error),
+                LogicErrorSource::LinearAlgebraGraphComputing(error) => Some(error),
             },
             None => None,
         }
@@ -83,6 +92,16 @@ impl From<SparseLinearAlgebraError> for LogicError {
             error_type: LogicErrorType::SparseLinearAlgebra(error.error_type()),
             explanation: String::new(),
             source: Some(LogicErrorSource::SparseLinearAlgebra(error)),
+        }
+    }
+}
+
+impl From<LinearAlgebraGraphComputingError> for LogicError {
+    fn from(error: LinearAlgebraGraphComputingError) -> Self {
+        Self {
+            error_type: LogicErrorType::LinearAlgebraGraphComputingError(error.error_type()),
+            explanation: String::new(),
+            source: Some(LogicErrorSource::LinearAlgebraGraphComputing(error)),
         }
     }
 }
