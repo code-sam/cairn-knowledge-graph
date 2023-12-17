@@ -1,3 +1,4 @@
+pub mod concepts;
 pub mod error;
 pub mod graph;
 pub mod operations;
